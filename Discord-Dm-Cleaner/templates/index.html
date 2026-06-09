@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    </head>
+    <body class="bg-[linear-gradient(to_bottom,#0F007E_0%,#DA8181_100%)] h-screen">
+
+
+    <navbar class="flex justify-between ">
+        <div class="top-left ml-20 p-5">
+            <img src="{% static 'icons/discord.svg' %}" alt="discord">
+        </div>
+        <div class="mid flex">
+            <a href="/service/">
+                <h1 class="text-white text-3xl font-light p-10">Service</h1>
+            </a>
+            <h1 class="text-white text-3xl font-light p-10">How it works?</h1>    
+        </div>
+        <div class="top-right mr-20 p-5">
+            <img src="{% static 'icons/checklock.svg' %}" alt="checklock">
+        </div>
+    </navbar>
+
+    <!-- info section -->
+    <section class="text-[linear-gradient(to_right,#FFFFFF_34%,#963DAC_100%)] mt-30 flex flex-col items-center">
+
+        <div class="top flex">
+<div class="left border-2 border-white p-5 m-5 bg-gradient-to-r from-white to-[#963DAC] bg-clip-text text-transparent font-bold text-5xl w-110">
+    <h1 class="">Delete all Discord
+Messages & DMs</h1>
+
+</div>
+
+<div class="right border-2 border-white p-5 m-5 bg-gradient-to-r from-white to-[#963DAC] bg-clip-text text-transparent font-bold text-5xl w-110">
+<h1>Clean your DMs 
+for your privacy</h1>
+</div>
+        </div>
+        <div class="bottom flex">
+            <div class="left border-2 border-white p-5 m-5 bg-gradient-to-r from-white to-[#963DAC] bg-clip-text text-transparent font-bold text-[45px] w-110">
+<h1>Start to clean your
+DMs FOR FREE</h1>
+            </div>
+
+            <div class="right border-2 border-white p-5 m-5 bg-gradient-to-r from-white to-[#963DAC] bg-clip-text text-transparent font-bold text-6xl w-110">
+                <h1>Export your 
+DMs as PDF</h1>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- pdf icon -->
+    <div class="flex justify-end w-full p-15 mt-15">
+        <img src="{% static 'icons/pdf.svg' %}" alt="pdf" class="w-16 h-16">
+    </div>
+
+</body>
+</html>

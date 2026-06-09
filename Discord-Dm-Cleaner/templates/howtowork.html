@@ -1,0 +1,52 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'css/output.css' %}" rel="stylesheet">
+</head>
+<body class="bg-[linear-gradient(to_bottom,#0F007E_0%,#DA8181_100%)] h-screen">
+
+
+    <navbar class="flex justify-between ">
+        <div class="top-left ml-20 p-5">
+            <img src="{% static 'icons/discord.svg' %}" alt="discord">
+        </div>
+        <div class="mid flex">
+            <a class="text-white text-3xl font-light p-10" href="/service/">Service</a>
+            <a class="text-white text-3xl font-light p-10 underline underline-offset-4" href="/howtowork/">How it works?</a>    
+        </div>
+        <div class="top-right mr-20 p-5">
+            <img src="{% static 'icons/checklock.svg' %}" alt="checklock">
+        </div>
+    </navbar>
+
+    <!-- decoration section -->
+    <section class="flex justify-between items-center mt-30">
+        <div class="egg p-15">
+            <img src="{% static 'icons/egg.svg' %}" alt="egg">
+        </div>
+
+    <div class="middle w-1/2 text-center">
+        <h1 class="text-white text-3xl font-light mt-20">━━━━━━━━━   HOW IT WORKS?   ━━━━━━━━━</h1>
+        <p class="text-white text-lg font-light mt-10">1. Enter your Discord Token and Target ID in the Service page.</p>
+        <p class="text-white text-lg font-light mt-5">2. Click the "Start Cleaning" button to begin the DM cleaning process.</p>
+        <p class="text-white text-lg font-light mt-5">3. Monitor the real-time logs in the terminal section to see the progress and any potential errors.</p>
+        <p class="text-white text-lg font-light mt-5">4. If you wish to stop the cleaning process at any time, click the "Stop Cleaning" button.</p>
+        <p class="text-white text-lg font-light mt-5">5. Once the cleaning is complete, you will see a success message in the logs.</p>
+        <p class="text-white text-lg font-light mt-5">6. For security reasons, always ensure to keep your token private and do not share it with anyone.</p>
+        <a href="https://www.forwardmsg.com/docs/how_to_obtain_discord_client" target="_blank" rel="noopener noreferrer">
+            <p class="text-white text-lg font-light mt-5">7. How to get your token?</p>
+        </a>
+    </div>
+ 
+
+    <div class="right">
+        <img src="{% static 'icons/token.svg' %}" alt="egg">
+    </div>
+
+
+    </section>
+</body>
+</html>

@@ -1,0 +1,181 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'css/output.css' %}" rel="stylesheet">
+</head>
+<body class="bg-[linear-gradient(to_bottom,#0F007E_0%,#DA8181_100%)] h-screen">
+
+
+    <navbar class="flex justify-between ">
+        <div class="top-left ml-20 p-5">
+            <img src="{% static 'icons/discord.svg' %}" alt="discord">
+        </div>
+        <div class="mid flex">
+            <a class="text-white text-3xl font-light p-10 underline underline-offset-4 " href="/service/">Service</a>
+            <a class="text-white text-3xl font-light p-10" href="/howtowork/">How it works?</a>    
+        </div>
+        <div class="top-right mr-20 p-5">
+            <img src="{% static 'icons/checklock.svg' %}" alt="checklock">
+        </div>
+    </navbar>
+
+    <!-- decoration section -->
+    <section class="flex justify-between items-center mt-30">
+        <div class="egg p-15">
+            <img src="{% static 'icons/egg.svg' %}" alt="egg">
+        </div>
+
+    <div class="middle">
+        <!-- Terminal -->
+<div id="terminal" style="
+    width: 384px;
+    height: 200px;
+    background: #0d0d0d;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 13px;
+    color: #00ff99;
+    margin-bottom: 20px;
+">
+
+    <div id="terminalContent">
+        <span style="color:#666;">Waiting...</span>
+    </div>
+</div>
+
+        <h1 class="mr-40 text-white text-3xl font-light mt-20">━━━━━━━━━   START   ━━━━━━━━━</h1>
+{% if error %}
+    <p class="text-red-400 font-bold text-center">{{ error }}</p>
+{% endif %}
+        <div class="inputs mt-20">
+    <form id="mainForm" class="flex flex-col gap-5" method="post" action="{% url 'service' %}">
+        {% csrf_token %}
+        <input type="text" id="tokenInput" name="token" class="p-3 rounded-md border-2 border-white bg-transparent text-white w-96" placeholder="Enter your Discord Token">
+        <input type="text" name="target_id" id="targetInput" class="p-3 rounded-md border-2 border-white bg-transparent text-white w-96" placeholder="Enter discord id">
+        
+       <button type="button" id="mainBtn" onclick="handleClick()"
+    class="bg-[linear-gradient(to_right,#FFFFFF_1%,#963DAC_80%)] font-bold text-xl p-3 rounded-md border-2 border-white text-white w-96">
+    Start Cleaning
+</button>
+    </form>
+</div>
+
+<script>
+    let isRunning = false;
+    let currentToken = "";
+    let pollInterval = null;
+
+    const btn = document.getElementById('mainBtn');
+    const terminal = document.getElementById('terminal');
+    const terminalContent = document.getElementById('terminalContent');
+
+    function setRunning() {
+        isRunning = true;
+        btn.textContent = 'Stop';
+        btn.style.background = 'linear-gradient(to right, #FF4444 1%, #8B0000 80%)';
+        startPolling();
+    }
+
+    function setStopped() {
+        isRunning = false;
+        btn.textContent = 'Start Cleaning';
+        btn.style.background = 'linear-gradient(to right, #FFFFFF 1%, #963DAC 80%)';
+        stopPolling();
+    }
+
+    function addLog(msg) {
+        terminalContent.innerHTML = '';
+        // her log için satır
+    }
+
+    let lastLogCount = 0;
+
+    function startPolling() {
+        pollInterval = setInterval(() => {
+            fetch("{% url 'logs' %}")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.logs.length !== lastLogCount) {
+                        lastLogCount = data.logs.length;
+                        terminalContent.innerHTML = data.logs
+                            .map(l => `<div>${l}</div>`)
+                            .join('');
+                        terminal.scrollTop = terminal.scrollHeight;
+
+                        const last = data.logs[data.logs.length - 1] || '';
+                        if (last.includes('Dm cleared successfully') || last.includes('stopped')) {
+                            setStopped();
+                        }
+                    }
+                });
+        }, 1000);
+    }
+
+    function stopPolling() {
+        if (pollInterval) {
+            clearInterval(pollInterval);
+            pollInterval = null;
+        }
+    }
+
+    function handleClick() {
+        if (!isRunning) {
+            const token = document.getElementById('tokenInput').value.trim();
+            const target_id = document.getElementById('targetInput').value.trim();
+
+            if (!token || !target_id) {
+                alert("Token or Target ID cannot be empty!");
+                return;
+            }
+
+            currentToken = token;
+            terminalContent.innerHTML = '<span style="color:#666;">// Starting...</span>';
+            lastLogCount = 0;
+
+            fetch("{% url 'service' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: `token=${encodeURIComponent(token)}&target_id=${encodeURIComponent(target_id)}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "started") {
+                    setRunning();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            });
+
+        } else {
+            fetch("{% url 'stop' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: `token=${encodeURIComponent(currentToken)}`
+            })
+            .then(res => res.json())
+            .then(() => setStopped());
+        }
+    }
+</script>
+    </div>
+
+    <div class="right">
+        <img src="{% static 'icons/token.svg' %}" alt="egg">
+    </div>
+
+
+    </section>
+</body>
+</html>
